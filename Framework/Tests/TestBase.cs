@@ -22,9 +22,9 @@ namespace Tests
 {
     public class ModellerConfig
     {
-        public static String APIUrl = "http://ec2-35-178-193-112.eu-west-2.compute.amazonaws.com";
+        public static String APIUrl = "{{API_HOST}}";
 
-        public static String APIKey = "PtYawE1NRkqBmf4dy3tY6kJW5";
+        public static String APIKey = "{{API_KEY}}";
 
         public static String ServerName = "VIP-James";
 
