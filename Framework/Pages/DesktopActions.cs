@@ -47,6 +47,8 @@ namespace TestModellerCSharp.Pages
             currentWindow = app.app.GetMainWindow(new UIA3Automation());
 
             System.Threading.Thread.Sleep(2000);
+
+            currentWindow.Focus();
         }
 
         /**
