@@ -25,6 +25,20 @@ namespace TestModellerCSharp.Pages
         }
 
         /**
+         * Launches an application from the Store.
+         * @name Open Store Application
+         * @param appName from store
+         */
+        public void OpenStoreApplication(String appName)
+        {
+            app.app = Application.LaunchStoreApp(appName);
+
+            UseMainWindow();
+
+            passStepWithScreenshot("Opening application " + appName);
+        }
+
+        /**
          * Launches an application.
          * @name Open Application
          * @param appName Relative or absolute path to executable to launch
