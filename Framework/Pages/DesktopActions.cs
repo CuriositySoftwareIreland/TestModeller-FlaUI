@@ -127,6 +127,12 @@ namespace TestModellerCSharp.Pages
             passStepWithScreenshot("Enter text '" + text + "' with automatation ID " + objectName);
         }
 
+		/**
+         * Assert Label Contains Text.
+         * @name Assert Label Text
+         * @param objectName Object identifier
+         * @param text Value to assert label contains
+         */
         public void AssertLabelText(String objectName, String text)
         {
             var resultLabel = getElementForObject(objectName).AsLabel();
