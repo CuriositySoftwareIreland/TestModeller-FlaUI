@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using TestModellerCSharp.Utilities;
 using Utilities;
@@ -66,6 +67,53 @@ namespace TestModellerCSharp.Pages
         }
 
         /**
+         * Use window by title
+         * @name Use Window by Title
+         */
+        public void UseWindowByTitle(String title)
+        {
+            System.Threading.Thread.Sleep(1000);
+
+            Window[] windows = app.app.GetAllTopLevelWindows(new UIA3Automation());
+            foreach(Window w in windows)
+            {
+                if (w.Title == title)
+                {
+                    currentWindow = w;
+
+                    System.Threading.Thread.Sleep(2000);
+
+                    currentWindow.Focus();
+
+                    break;
+                }
+                    
+            }
+
+            failStep("Window not found with title " + title);
+        }
+
+        /**
+         * Use window by identifier
+         * @name Use Window by Identifier
+         */
+        public void UseWindowByIdentifier(String objectId)
+        {
+            System.Threading.Thread.Sleep(1000);
+
+            Window w = getElementForObject(objectId).AsWindow();
+
+            if (w != null)
+            {
+                currentWindow = w;
+
+                System.Threading.Thread.Sleep(2000);
+
+                currentWindow.Focus();
+            }
+        }
+
+        /**
          * Inputs value to a textbox module.
          * @name Enter Text
          * @param objectName Object identifier
@@ -101,10 +149,22 @@ namespace TestModellerCSharp.Pages
          */
         public void Click(String objectName)
         {
-            var button1 = getElementForObject(objectName);
+            var button1 = getElementForObject(objectName).AsButton();
             button1.Click();
 
-            passStepWithScreenshot( "Click button by automatation ID " + objectName);
+            passStepWithScreenshot( "Click by identifer " + objectName);
+        }
+
+        /**
+         * Click to Button.
+         * @name Click Button
+         */
+        public void ClickButton(String objectName)
+        {
+            var button1 = getElementForObject(objectName).AsButton();
+            button1.Invoke();
+
+            passStepWithScreenshot("Click button by automatation ID " + objectName);
         }
 
         /**
@@ -663,15 +723,46 @@ namespace TestModellerCSharp.Pages
 
         private AutomationElement getElementForObject(String objectId, Boolean failIfNotFound = true)
         {
-            PropertyCondition cond = buildObjectLocator(objectId);
-
-            return currentWindow.FindFirstDescendant(cond);
+            if (objectId.StartsWith("xpath:")) {
+                return currentWindow.FindFirstByXPath(objectId.Replace("xpath:", ""));
+            } else {
+                PropertyCondition cond = buildObjectLocator(objectId);
+                return currentWindow.FindFirstDescendant(cond);
+            }
         }
 
-        private PropertyCondition buildObjectLocator(String objectId)
+        private PropertyCondition buildObjectLocator(String objectLocator)
         {
             ConditionFactory cf = new ConditionFactory(new UIA3PropertyLibrary());
-            return cf.ByAutomationId(objectId);
+
+            if (objectLocator.StartsWith("id:"))
+            {
+                return cf.ByAutomationId(objectLocator.Replace("id:",""));
+            }
+            else if (objectLocator.StartsWith("name:"))
+            {
+                return cf.ByName(objectLocator.Replace("name:", ""));
+            }
+            else if (objectLocator.StartsWith("class:"))
+            {
+                return cf.ByClassName(objectLocator.Replace("class:", ""));
+            }
+            else if (objectLocator.StartsWith("text:"))
+            {
+                return cf.ByText(objectLocator.Replace("text:", ""));
+            }
+            else if (objectLocator.StartsWith("helpText:"))
+            {
+                return cf.ByHelpText(objectLocator.Replace("helpText:", ""));
+            }
+            else if (objectLocator.StartsWith("value:"))
+            {
+                return cf.ByValue(objectLocator.Replace("value:", ""));
+            } 
+            else
+            {
+                return cf.ByAutomationId(objectLocator);
+            }
         }
     }
 }
