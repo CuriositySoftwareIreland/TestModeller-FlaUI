@@ -45,7 +45,7 @@ namespace TestModellerCSharp.Pages
          */
         public void OpenApplication(String appName)
         {
-            app.app = Application.LaunchStoreApp(appName);
+            app.app = Application.Launch(appName);
 
             UseMainWindow();
 
