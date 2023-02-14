@@ -67,6 +67,15 @@ namespace TestModellerCSharp.Pages
         }
 
         /**
+        * Wait
+        * @name Wait (Sleep)
+        */
+        public void Sleep(int timeoutMS)
+        {
+            System.Threading.Thread.Sleep(timeoutMS);
+        }
+
+        /**
          * Use window by title
          * @name Use Window by Title
          */
@@ -74,8 +83,15 @@ namespace TestModellerCSharp.Pages
         {
             System.Threading.Thread.Sleep(1000);
 
-            Window[] windows = app.app.GetAllTopLevelWindows(new UIA3Automation());
-            foreach(Window w in windows)
+            List<Window> topWindows = new List<Window>(app.app.GetAllTopLevelWindows(new UIA3Automation()));
+            List<Window> windows = new List<Window>();
+            foreach (Window window in topWindows)
+            {
+                windows.Add(window);
+                windows.AddRange(getAllChildWindows(window));
+            }
+
+            foreach (Window w in windows)
             {
                 if (w.Title == title)
                 {
@@ -85,12 +101,27 @@ namespace TestModellerCSharp.Pages
 
                     currentWindow.Focus();
 
-                    break;
+                    return;
                 }
-                    
             }
 
             failStep("Window not found with title " + title);
+        }
+
+        private List<Window> getAllChildWindows(Window w)
+        {
+            if (w == null || w.ModalWindows == null)
+                return new List<Window>();
+
+            List<Window> subWindows = new List<Window>(w.ModalWindows);
+            List<Window> windows = new List<Window>();
+            foreach (Window subW in subWindows)
+            {
+                windows.Add(subW);
+                windows.AddRange(getAllChildWindows(subW));
+            }
+
+            return windows;
         }
 
         /**
