@@ -61,7 +61,7 @@ namespace TestModellerCSharp.Pages
         {
             currentWindow = app.app.GetMainWindow(new UIA3Automation());
 
-            System.Threading.Thread.Sleep(2000);
+            currentWindow.WaitUntilClickable(TimeSpan.FromSeconds(5));
 
             currentWindow.Focus();
         }
@@ -187,7 +187,7 @@ namespace TestModellerCSharp.Pages
         public void Click(String objectName)
         {
             var button1 = getElementForObject(objectName).AsButton();
-            button1.Click();
+            button1.Click(true);
 
             passStepWithScreenshot( "Click by identifer " + objectName);
         }
@@ -211,7 +211,7 @@ namespace TestModellerCSharp.Pages
         public void RightClick(String objectName)
         {
             var button1 = getElementForObject(objectName);
-            button1.RightClick();
+            button1.RightClick(true);
 
             passStepWithScreenshot("Right click button by automatation ID " + objectName);
         }
@@ -223,7 +223,7 @@ namespace TestModellerCSharp.Pages
         public void DoubleClick(String objectName)
         {
             var button1 = getElementForObject(objectName);
-            button1.DoubleClick();
+            button1.DoubleClick(true);
 
             passStepWithScreenshot("Double click button by automatation ID " + objectName);
         }
@@ -236,7 +236,7 @@ namespace TestModellerCSharp.Pages
         public void SelectComboBoxByIndex(String objectName, int index)
         {
             var comboBox = getElementForObject(objectName).AsComboBox();
-            comboBox.Select(index).Click();
+            comboBox.Select(index).Click(true);
 
             passStepWithScreenshot("Select Combobox with index " + index + " and automatation ID " + objectName);
         }
@@ -248,7 +248,7 @@ namespace TestModellerCSharp.Pages
         public void SelectListBoxByIndex(String objectName, int index)
         {
             var comboBox = getElementForObject(objectName).AsListBox();
-            comboBox.Select(index).Click();
+            comboBox.Select(index).Click(true);
 
             passStepWithScreenshot("Select list box with index " + index + " and automatation ID " + objectName);
         }
@@ -260,7 +260,7 @@ namespace TestModellerCSharp.Pages
         public void SelectRadioButton(String objectName)
         {
             var comboBox = getElementForObject(objectName).AsRadioButton();
-            comboBox.Click();
+            comboBox.Click(true);
 
             passStepWithScreenshot("Select RadioButton with automatation ID " + objectName);
         }
