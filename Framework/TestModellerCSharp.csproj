@@ -279,6 +279,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Pages\AssertionActions.cs" />
     <Compile Include="Pages\BasePage.cs" />
     <Compile Include="Pages\DesktopActions.cs" />
     <Compile Include="Pages\Samples\Calculator\CalculatorPage.cs" />
